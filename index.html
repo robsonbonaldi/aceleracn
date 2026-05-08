@@ -757,59 +757,43 @@ function buildTaline(){
   GERENTES.forEach(function(g){
     var rp=r[g];var name=g.charAt(0).toUpperCase()+g.slice(1);
     var tl=(rp&&rp.taline)||{};
-    var hasDraft=rp&&!rp.submitted;
-    var hasSubmit=rp&&rp.submitted;
-    var canEdit=hasDraft||hasSubmit;
+    var hasData=rp&&(rp.submitted||rp.vgv||rp.acum);
     html+='<div class="taline-gerente" id="tg-'+g+'">';
+    // Header
     html+='<div class="taline-gerente-header">';
-    if(PHOTOS[g])html+='<div style="width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0"><img src="'+PHOTOS[g]+'" style="width:100%;height:100%;object-fit:cover"></div>';
-    html+='<div><div style="font-size:14px;font-weight:700;color:var(--white)">'+name+'</div>';
-    if(hasSubmit)html+='<span class="pill pill-ok">enviou ✓</span>';
-    else if(hasDraft)html+='<span class="pill pill-draft">rascunho salvo</span>';
-    else html+='<span class="pill pill-pend">não preencheu ainda</span>';
+    html+='<div style="width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;background:'+({thiago:'rgba(59,130,246,0.25)',phellippe:'rgba(20,184,166,0.25)',thalita:'rgba(249,115,22,0.25)'}[g]||'var(--panel)')+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+({thiago:'#3B82F6',phellippe:'#14B8A6',thalita:'#F97316'}[g]||'var(--text)')+'">'+({thiago:'TH',phellippe:'PH',thalita:'TA'}[g]||'??')+'</div>';
+    html+='<div><div style="font-size:15px;font-weight:700;color:var(--white)">Gerente: '+name+'</div>';
+    if(hasData)html+='<span class="pill pill-ok" style="font-size:9px">Dados disponiveis</span>';
+    else html+='<span class="pill pill-pend" style="font-size:9px">Sem preenchimento ainda</span>';
     html+='</div></div>';
-    if(canEdit){
-      html+='<div class="taline-section-title">Imobiliárias visitadas por você</div>';
-      html+='<div class="f2"><div class="field"><label>Quantidade</label><input type="number" id="tl-imob-qtd-'+g+'" value="'+(tl.imobQtd||'')+'" placeholder="0"></div><div class="field"><label>Nomes</label><input type="text" id="tl-imob-names-'+g+'" value="'+(tl.imobNames||'')+'" placeholder="Ex: Alfa, Beta, Gama"></div></div>';
-      html+='<div class="taline-section-title">Ações / brindes nas imobiliárias ou na CN</div>';
-      html+='<div class="field"><input type="text" id="tl-brindes-'+g+'" value="'+(tl.brindes||'')+'" placeholder="Descreva as ações realizadas"></div>';
-      html+='<div class="taline-section-title">Clientes atendidos (imobiliárias ou CN)</div>';
-      html+='<div class="field"><input type="number" id="tl-clientes-'+g+'" value="'+(tl.clientes||'')+'" placeholder="0"></div>';
-      html+='<div class="taline-section-title">Propostas acompanhadas</div>';
-      html+='<div class="field"><input type="number" id="tl-propostas-'+g+'" value="'+(tl.propostas||'')+'" placeholder="0"></div>';
-      html+='<div class="taline-section-title">Treinamentos de imobiliárias</div>';
-      html+='<div class="field"><input type="text" id="tl-treino-'+g+'" value="'+(tl.treino||'')+'" placeholder="Descreva os treinamentos realizados"></div>';
-      html+='<div class="taline-section-title">Validação dos dados do gerente</div>';
-      html+='<div class="rg"><div class="rb '+(tl.status==='ok'?'yes':'')+'" onclick="setTlStatus(this,\''+g+'\',\'ok\')">✓ Dados corretos</div><div class="rb '+(tl.status==='revisar'?'no':'')+'" onclick="setTlStatus(this,\''+g+'\',\'revisar\')">✗ Revisar</div></div>';
-    } else {
-      html+='<div style="font-size:12px;color:var(--muted);padding:8px 0">Aguardando o gerente preencher o rascunho desta semana para liberar seus campos.</div>';
+    // Taline fields - always editable
+    html+='<div class="f2" style="margin-top:12px">';
+    html+='<div class="field"><label>Imobiliarias visitadas (qtd)</label><input type="number" id="tl-imob-qtd-'+g+'" value="'+(tl.imobQtd||'')+'" placeholder="0"></div>';
+    html+='<div class="field"><label>Nomes das imobiliarias</label><input type="text" id="tl-imob-names-'+g+'" value="'+(tl.imobNames||'')+'" placeholder="Ex: Alfa, Beta, Gama"></div>';
+    html+='</div>';
+    html+='<div class="field"><label>Acoes / brindes nas imobiliarias</label><input type="text" id="tl-brindes-'+g+'" value="'+(tl.brindes||'')+'" placeholder="Descreva as acoes realizadas"></div>';
+    html+='<div class="f2">';
+    html+='<div class="field"><label>Clientes atendidos (imob/CN)</label><input type="number" id="tl-clientes-'+g+'" value="'+(tl.clientes||'')+'" placeholder="0"></div>';
+    html+='<div class="field"><label>Propostas acompanhadas</label><input type="number" id="tl-propostas-'+g+'" value="'+(tl.propostas||'')+'" placeholder="0"></div>';
+    html+='</div>';
+    html+='<div class="field"><label>Treinamentos de imobiliarias</label><input type="text" id="tl-treino-'+g+'" value="'+(tl.treino||'')+'" placeholder="Descreva os treinamentos realizados"></div>';
+    if(hasData){
+      html+='<div style="margin-top:10px"><label style="margin-bottom:6px;display:block">Validacao dos dados do gerente</label>';
+      html+='<div class="rg"><div class="rb '+(tl.status==='ok'?'yes':'')+'" onclick="setTlStatus(this,\''+g+'\',\'ok\')">✓ Dados corretos</div><div class="rb '+(tl.status==='revisar'?'no':'')+'" onclick="setTlStatus(this,\''+g+'\',\'revisar\')">✗ Revisar</div></div></div>';
     }
     html+='</div>';
   });
   document.getElementById('taline-items').innerHTML=html;
 }
-function setTlStatus(g,v,el){
-  var parent=document.getElementById('tg-'+g);
-  if(parent)parent.querySelectorAll('.rb').forEach(function(b){b.className='rb';});
-  if(el)el.className='rb '+(v==='ok'?'yes':'no');
-  saveTalineField(g,'status',v);
-}
-function saveTalineField(g,field,val){
-  var d=gd(),k=wkey();if(!d[k])d[k]={week:wk(),reports:{}};
-  if(!d[k].reports[g])d[k].reports[g]={};
-  if(!d[k].reports[g].taline)d[k].reports[g].taline={};
-  d[k].reports[g].taline[field]=val;sd(d);
-}
+
 function submitTaline(){
-  var d=gd(),k=wkey();if(!d[k])d[k]={week:wk(),reports:{}};
+  var d=gd(),k=wkey();
+  if(!d[k])d[k]={week:wk(),reports:{}};
   GERENTES.forEach(function(g){
-    if(!d[k].reports[g])return;
+    if(!d[k].reports[g])d[k].reports[g]={};
     if(!d[k].reports[g].taline)d[k].reports[g].taline={};
-    var fields=['imobQtd','imobNames','brindes','clientes','propostas','treino'];
-    fields.forEach(function(f){
-      var elId='tl-'+f.toLowerCase().replace(/[^a-z0-9]/gi,'')+'-'+g;
-      // map field names to input ids
-      var idMap={imobQtd:'tl-imob-qtd-'+g,imobNames:'tl-imob-names-'+g,brindes:'tl-brindes-'+g,clientes:'tl-clientes-'+g,propostas:'tl-propostas-'+g,treino:'tl-treino-'+g};
+    var idMap={imobQtd:'tl-imob-qtd-'+g,imobNames:'tl-imob-names-'+g,brindes:'tl-brindes-'+g,clientes:'tl-clientes-'+g,propostas:'tl-propostas-'+g,treino:'tl-treino-'+g};
+    Object.keys(idMap).forEach(function(f){
       var el=document.getElementById(idMap[f]);
       if(el)d[k].reports[g].taline[f]=el.value;
     });
@@ -829,7 +813,7 @@ function buildDash(who){dashWho=who;
     return'<div class="pc '+cls+'"><div class="pc-head"><div class="pc-name">'+g.charAt(0).toUpperCase()+g.slice(1)+'</div><div class="sdot s-empty" id="sd-'+pfx+'-'+who+'"></div></div><div class="pc-val" id="d-'+pfx+'-acum-'+who+'">—</div><div class="pc-sub">de R$ 5.000.000</div><div class="mp"><div class="mp-f" id="d-'+pfx+'-bar-'+who+'" style="width:0%;background:'+col+'"></div></div><div class="ps4"><div class="psi"><div class="psi-l">VGV sem.</div><div class="psi-v" id="d-'+pfx+'-vgv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Conversão</div><div class="psi-v" id="d-'+pfx+'-conv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Assinados</div><div class="psi-v" id="d-'+pfx+'-ass-'+who+'">—</div></div><div class="psi"><div class="psi-l">Pagos</div><div class="psi-v" id="d-'+pfx+'-pag-'+who+'">—</div></div></div><div id="d-'+pfx+'-pills-'+who+'" style="margin-top:6px"></div></div>';
   }).join('');
   el.innerHTML='<div class="dash-h"><div><h1>Dashboard Canal SC</h1><p>'+title+' &mdash; Semana <span id="d-wk-'+who+'">'+(keys.length?d[keys[0]].week:'—')+'</span></p></div><div style="display:flex;gap:8px;align-items:center"><select class="sem-sel" onchange="changeSem(this.value)" id="sem-sel-'+who+'">'+semOpts+'</select><button class="logout-btn" onclick="logout()">Sair</button></div></div>'
-  +'<div id="sent-row-'+who+'" style="margin-bottom:14px"></div>'
+  +'<div id="sent-row-'+who+'" style="margin-bottom:14px"></div>'+(who==='fernando'?'<div class="meta-box" style="border-color:rgba(59,130,246,0.3)"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Robson — Coordenador (Meta Mensal)</div><div class="meta-big" id="d-rob-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Robson<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-rob-prog-'+who+'" style="width:0%;background:linear-gradient(90deg,#3B82F6,#14B8A6)"></div></div><div class="prog-lbl"><span>0%</span><span id="d-rob-pct-'+who+'">0%</span><span>100%</span></div></div>':'')
   +'<div class="meta-box"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Acumulado no Mês</div><div class="meta-big" id="d-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Total<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-prog-'+who+'" style="width:0%"></div></div><div class="prog-lbl"><span>0%</span><span id="d-pct-'+who+'">0%</span><span>100%</span></div></div>'
   +'<div class="p3">'+gerCards+'</div>'
   +'<div class="ranking-box"><div class="ranking-title">🏆 Ranking da Semana</div><div id="d-ranking-'+who+'"><div style="font-size:12px;color:var(--muted);text-align:center;padding:16px">Aguardando dados...</div></div></div>'
@@ -884,6 +868,17 @@ function loadSem(key,who){
   });
   var p=pct(totalAcum,15000000);
   document.getElementById('d-total-'+who).textContent=fmt(totalAcum);
+  // Robson meta for Fernando view
+  if(who==='fernando'){
+    var robTot=totalAcum;
+    var robEl=document.getElementById('d-rob-total-'+who);
+    var robProg=document.getElementById('d-rob-prog-'+who);
+    var robPct=document.getElementById('d-rob-pct-'+who);
+    if(robEl)robEl.textContent=fmt(robTot);
+    var robP=pct(robTot,15000000);
+    if(robProg)robProg.style.width=robP+'%';
+    if(robPct)robPct.textContent=robP+'% atingido';
+  }
   document.getElementById('d-prog-'+who).style.width=p+'%';
   document.getElementById('d-pct-'+who).textContent=p+'% atingido';
   // RANKING
