@@ -219,15 +219,15 @@ select option{background:#1A1E28}
       <div class="user-info"><h3>Robson</h3><p>Coordenador</p></div>
     </button>
     <button class="user-btn" onclick="sel('thiago')">
-      <div class="avatar"><img src="https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/thiago.jpg" alt="Thiago"></div>
+      <div class="avatar" style="background:rgba(59,130,246,0.25);color:#3B82F6;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;flex-shrink:0">TH</div>
       <div class="user-info"><h3>Thiago</h3><p>Gerente</p></div>
     </button>
     <button class="user-btn" onclick="sel('phellippe')">
-      <div class="avatar"><img src="https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/phellippe.jpg" alt="Phellippe"></div>
+      <div class="avatar" style="background:rgba(20,184,166,0.25);color:#14B8A6;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;flex-shrink:0">PH</div>
       <div class="user-info"><h3>Phellippe</h3><p>Gerente</p></div>
     </button>
     <button class="user-btn" onclick="sel('thalita')">
-      <div class="avatar"><img src="https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/thalita.jpg" alt="Thalita"></div>
+      <div class="avatar" style="background:rgba(249,115,22,0.25);color:#F97316;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;flex-shrink:0">TA</div>
       <div class="user-info"><h3>Thalita</h3><p>Gerente</p></div>
     </button>
     <button class="user-btn" onclick="sel('taline')">
@@ -497,11 +497,7 @@ select option{background:#1A1E28}
 <script>
 
 // PHOTOS injected below
-var PHOTOS={
-  thiago:'https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/thiago.jpg',
-  phellippe:'https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/phellippe.jpg',
-  thalita:'https://raw.githubusercontent.com/robsonbonaldi/aceleracn/main/thalita.jpg'
-};
+var PHOTOS={thiago:'',phellippe:'',thalita:''};
 
 var PINS={fernando:'9999',robson:'0000',thiago:'1111',phellippe:'2222',thalita:'3333',taline:'4444'};
 var GERENTES=['thiago','phellippe','thalita'];
@@ -784,7 +780,7 @@ function buildTaline(){
       html+='<div class="taline-section-title">Treinamentos de imobiliárias</div>';
       html+='<div class="field"><input type="text" id="tl-treino-'+g+'" value="'+(tl.treino||'')+'" placeholder="Descreva os treinamentos realizados"></div>';
       html+='<div class="taline-section-title">Validação dos dados do gerente</div>';
-      html+='<div class="rg"><div class="rb '+(tl.status==='ok'?'yes':'')+'" onclick="setTlStatus(''+g+'','ok',this)">✓ Dados corretos</div><div class="rb '+(tl.status==='revisar'?'no':'')+'" onclick="setTlStatus(''+g+'','revisar',this)">✗ Revisar</div></div>';
+      html+='<div class="rg"><div class="rb '+(tl.status==='ok'?'yes':'')+'" onclick="setTlStatus(this,\''+g+'\',\'ok\')">✓ Dados corretos</div><div class="rb '+(tl.status==='revisar'?'no':'')+'" onclick="setTlStatus(this,\''+g+'\',\'revisar\')">✗ Revisar</div></div>';
     } else {
       html+='<div style="font-size:12px;color:var(--muted);padding:8px 0">Aguardando o gerente preencher o rascunho desta semana para liberar seus campos.</div>';
     }
@@ -823,7 +819,7 @@ function submitTaline(){
   document.getElementById('taline-success').style.display='block';
 }
 // DASHBOARD
-function buildDash(who){
+function buildDash(who){dashWho=who;
   var d=gd();var keys=Object.keys(d).sort().reverse();
   var el=document.getElementById('dash-'+who);
   var title=who==='robson'?'Robson — Coordenador':'Fernando — Diretor';
@@ -832,7 +828,7 @@ function buildDash(who){
     var cls=['pc-b','pc-t','pc-c'][gi];var col=COLORS[g];var pfx=['t','p','ta'][gi];
     return'<div class="pc '+cls+'"><div class="pc-head"><div class="pc-name">'+g.charAt(0).toUpperCase()+g.slice(1)+'</div><div class="sdot s-empty" id="sd-'+pfx+'-'+who+'"></div></div><div class="pc-val" id="d-'+pfx+'-acum-'+who+'">—</div><div class="pc-sub">de R$ 5.000.000</div><div class="mp"><div class="mp-f" id="d-'+pfx+'-bar-'+who+'" style="width:0%;background:'+col+'"></div></div><div class="ps4"><div class="psi"><div class="psi-l">VGV sem.</div><div class="psi-v" id="d-'+pfx+'-vgv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Conversão</div><div class="psi-v" id="d-'+pfx+'-conv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Assinados</div><div class="psi-v" id="d-'+pfx+'-ass-'+who+'">—</div></div><div class="psi"><div class="psi-l">Pagos</div><div class="psi-v" id="d-'+pfx+'-pag-'+who+'">—</div></div></div><div id="d-'+pfx+'-pills-'+who+'" style="margin-top:6px"></div></div>';
   }).join('');
-  el.innerHTML='<div class="dash-h"><div><h1>Dashboard Canal SC</h1><p>'+title+' &mdash; Semana <span id="d-wk-'+who+'">'+(keys.length?d[keys[0]].week:'—')+'</span></p></div><div style="display:flex;gap:8px;align-items:center"><select class="sem-sel" onchange="loadSem(this.value,''+who+'')" id="sem-sel-'+who+'">'+semOpts+'</select><button class="logout-btn" onclick="logout()">Sair</button></div></div>'
+  el.innerHTML='<div class="dash-h"><div><h1>Dashboard Canal SC</h1><p>'+title+' &mdash; Semana <span id="d-wk-'+who+'">'+(keys.length?d[keys[0]].week:'—')+'</span></p></div><div style="display:flex;gap:8px;align-items:center"><select class="sem-sel" onchange="changeSem(this.value)" id="sem-sel-'+who+'">'+semOpts+'</select><button class="logout-btn" onclick="logout()">Sair</button></div></div>'
   +'<div id="sent-row-'+who+'" style="margin-bottom:14px"></div>'
   +'<div class="meta-box"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Acumulado no Mês</div><div class="meta-big" id="d-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Total<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-prog-'+who+'" style="width:0%"></div></div><div class="prog-lbl"><span>0%</span><span id="d-pct-'+who+'">0%</span><span>100%</span></div></div>'
   +'<div class="p3">'+gerCards+'</div>'
@@ -840,7 +836,7 @@ function buildDash(who){
   +'<div class="b2"><div class="pbox"><h4>Termômetro — Imobiliárias (soma 3 praças)</h4><div id="d-thermo-'+who+'"></div></div><div class="pbox"><h4>Projetos da semana</h4><div id="d-projs-'+who+'">—</div></div></div>'
   +'<div class="pbox" style="margin-bottom:14px"><h4>Taline — Atividade semanal</h4><div id="d-taline-'+who+'">—</div></div>'
   +'<div class="b2"><div class="pbox"><h4>Validações</h4><div id="d-valid-'+who+'">—</div></div><div class="pbox"><h4>Histórico VGV semanal</h4><div id="d-hist-'+who+'">—</div></div></div>'
-  +'<div class="prompt-wrap"><h4>Prompt para o Claude</h4><div class="pt" id="d-prompt-'+who+'">—</div><button class="copy-btn" onclick="cpyPrompt(''+who+'')">Copiar prompt</button></div>';
+  +'<div class="prompt-wrap"><h4>Prompt para o Claude</h4><div class="pt" id="d-prompt-'+who+'">—</div><button class="copy-btn" onclick="cpyPrompt(\''+who+'\')">Copiar prompt</button></div>';
   if(keys.length)loadSem(keys[0],who);
 }
 function loadSem(key,who){
@@ -969,6 +965,8 @@ function cpyPrompt(who){
     btns.forEach(function(b){if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(who)){b.textContent='Copiado ✓';setTimeout(function(){b.textContent='Copiar prompt'},2000);}});
   });
 }
+var dashWho=null;
+function changeSem(key){if(dashWho)loadSem(key,dashWho);}
 function logout(){
   cur=null;perdOpc='';projSel={};
   document.querySelector('body').style.alignItems='center';
