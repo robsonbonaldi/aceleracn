@@ -305,12 +305,32 @@ select option{background:#1A1E28}
       <div class="form-card">
         <div class="fc-title"><div class="dot" style="background:var(--teal)"></div>Conversão</div>
         <div class="f2">
-          <div class="field"><label>Visitas realizadas *</label><input type="number" id="fvisitas" placeholder="0" oninput="updateCalc()"></div>
-          <div class="field"><label>Propostas geradas *</label><input type="number" id="fprop" placeholder="0" oninput="updateCalc()"></div>
+          <div class="field">
+            <label>Visitas realizadas *</label>
+            <input type="number" id="fvisitas" placeholder="0" oninput="updateCalc()">
+            <div style="margin-top:8px" id="visitas-detail"></div>
+            <button class="add-btn" style="margin-top:6px" onclick="addAtend('visitas')">+ Registrar visita</button>
+          </div>
+          <div class="field">
+            <label>Propostas geradas *</label>
+            <input type="number" id="fprop" placeholder="0" oninput="updateCalc()">
+            <div style="margin-top:8px" id="prop-detail"></div>
+            <button class="add-btn" style="margin-top:6px" onclick="addAtend('prop')">+ Registrar proposta</button>
+          </div>
         </div>
         <div class="f2">
-          <div class="field"><label>Contratos assinados *</label><input type="number" id="fcontr-ass" placeholder="0" oninput="updateCalc()"></div>
-          <div class="field"><label>Contratos pagos *</label><input type="number" id="fcontr-pag" placeholder="0"></div>
+          <div class="field">
+            <label>Contratos assinados *</label>
+            <input type="number" id="fcontr-ass" placeholder="0" oninput="updateCalc()">
+            <div style="margin-top:8px" id="contr-ass-detail"></div>
+            <button class="add-btn" style="margin-top:6px" onclick="addAtend('contr-ass')">+ Registrar contrato</button>
+          </div>
+          <div class="field">
+            <label>Contratos pagos *</label>
+            <input type="number" id="fcontr-pag" placeholder="0">
+            <div style="margin-top:8px" id="contr-pag-detail"></div>
+            <button class="add-btn" style="margin-top:6px" onclick="addAtend('contr-pag')">+ Registrar contrato pago</button>
+          </div>
         </div>
         <div class="field">
           <label>Taxa proposta → venda</label>
@@ -321,13 +341,13 @@ select option{background:#1A1E28}
       <button class="next-btn" onclick="nextTab(1)">Próxima etapa →</button>
     </div>
 
-    <!-- TAB 2: Imobiliárias — cada campo com seu termômetro -->
+    <!-- TAB 2: Imobiliárias -->
     <div id="gt-2" style="display:none">
       <div class="form-card">
         <div class="fc-title"><div class="dot" style="background:var(--amber)"></div>Imobiliárias</div>
 
         <div class="field">
-          <label>Imobiliárias visitadas na semana *</label>
+          <label>Imobiliárias visitadas na semana</label>
           <input type="number" id="fimob-qtd" placeholder="0" oninput="updateThermo('imob',this.value,30,'thermo-imob')">
           <div class="mthermo" id="thermo-imob">
             <div class="mthermo-track"><div class="mthermo-fill" style="width:0%;background:#F59E0B"></div></div>
@@ -336,7 +356,13 @@ select option{background:#1A1E28}
         </div>
 
         <div class="field">
-          <label>Clientes sem corretor *</label>
+          <label>Imobiliárias visitadas — nome das visitadas</label>
+          <div id="imob-list"></div>
+          <button class="add-btn" onclick="addImob()">+ Adicionar imobiliária</button>
+        </div>
+
+        <div class="field">
+          <label>Visitas de clientes sem corretor na CN</label>
           <input type="number" id="fimob-sem" placeholder="0" oninput="updateThermo('sem',this.value,30,'thermo-sem')">
           <div class="mthermo" id="thermo-sem">
             <div class="mthermo-track"><div class="mthermo-fill" style="width:0%;background:#14B8A6"></div></div>
@@ -345,7 +371,7 @@ select option{background:#1A1E28}
         </div>
 
         <div class="field">
-          <label>Clientes com corretor *</label>
+          <label>Visitas de clientes com corretor na CN</label>
           <input type="number" id="fimob-com" placeholder="0" oninput="updateThermo('com',this.value,30,'thermo-com')">
           <div class="mthermo" id="thermo-com">
             <div class="mthermo-track"><div class="mthermo-fill" style="width:0%;background:#3B82F6"></div></div>
@@ -354,13 +380,7 @@ select option{background:#1A1E28}
         </div>
 
         <div class="field">
-          <label>Nome das imobiliárias visitadas *</label>
-          <div id="imob-list"></div>
-          <button class="add-btn" onclick="addImob()">+ Adicionar imobiliária</button>
-        </div>
-
-        <div class="field">
-          <label>Top imobiliária da semana *</label>
+          <label>Top imobiliária da semana</label>
           <input type="text" id="ftop" placeholder="Nome da imobiliária destaque">
         </div>
       </div>
@@ -433,8 +453,8 @@ select option{background:#1A1E28}
     <div id="gt-5" style="display:none">
       <div class="form-card">
         <div class="fc-title"><div class="dot" style="background:var(--green)"></div>Para Robson <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;margin-left:4px">(opcional)</span></div>
-        <div class="field"><label>O que está travando / o que preciso</label><textarea id="ftrava" placeholder="Opcional..."></textarea></div>
-        <div class="field"><label>Foco da próxima semana</label><textarea id="fprox" placeholder="Opcional..."></textarea></div>
+        <div class="field"><label>O que está travando / o que preciso de Robson</label><textarea id="ftrava" placeholder="Seja direto — o que precisa de mim esta semana?"></textarea></div>
+        <div class="field"><label>Foco da próxima semana</label><textarea id="fprox" placeholder="O que você vai priorizar..."></textarea></div>
       </div>
       <button class="save-btn" onclick="saveDraft()">💾 Salvar rascunho</button>
       <button class="submit-btn" id="sbtn" onclick="submitG()">✓ Enviar relatório da semana</button>
@@ -468,10 +488,6 @@ select option{background:#1A1E28}
     </div>
     <button class="logout-btn" onclick="logout()">Sair</button>
   </div>
-  <div class="ranking-mini">
-    <h4>🏆 Ranking da semana</h4>
-    <div id="ranking-taline-list"></div>
-  </div>
   <div id="taline-content">
     <div class="form-card">
       <div class="fc-title"><div class="dot" style="background:var(--amber)"></div>Atividade semanal por gerente</div>
@@ -499,6 +515,8 @@ select option{background:#1A1E28}
 // PHOTOS injected below
 var PHOTOS={thiago:'',phellippe:'',thalita:''};
 
+var IMOBS={"thiago": ["CHF Imoveis", "YOD HEI IMOVEIS - JOINVILLE", "GJ Imóveis", "Invext", "Metseger", "KAZU GUSHIKEN CONSULTORIA IMOBILIÁR", "Vivamax Negócios Imobiliários Ltda", "BlueView", "Afonso Kremer", "Ativitta", "Lucia Cunha", "Amilton (Setor Imov)", "Desc Imóveis", "FK Imóveis", "Litoral Premium", "Aline Huhn Imóveis", "Conexão BC", "Imobiliária Imperador", "Domo Imóveis", "Tonolli Imóveis", "Pinheiro Imóveis", "Atlantique Imóveis", "Le Mur Investimentos Imob", "RVR Soluções Imobiliárias", "Personalité Imóveis", "Societé Neg Imobiliarios", "Vivero", "Brava Norte", "Imóveis de Primeira", "GOAT", "CRI", "Salute", "Jean Carlo Exclusive", "Prime Imóveis", "Van Gogh", "Invest Brava", "BC Beach Imóveis", "Brodasa Imóveis", "Exclusivittá Negocios Imobil", "Imex", "Imóvel Delivery", "Bem Imóveis", "Mundial", "Riboli", "Beto Agro", "Terra Imobiliaria", "Gadelha", "André - Camboriú", "Fiorim", "Renato Imóveis", "Marcio Imóveis", "Juliano Imóveis", "Guilherme Ramalho", "Reggiori", "Getulio Imóveis", "Imovill", "Lucia Sgarabotto", "Corazza", "Diego Djalma", "Jean Zonta", "Cleidi Benetti", "I3", "Propósito Imóveis", "Privilege", "Spazio"], "phellippe": ["Imobiliária Reserva", "Márcia Cadore Imóveis", "Rah Imóveis", "Imobiliaria Omni Imoveis", "Liberttas Consultoria Imobiliária", "Ocean Prime", "SIX 6 IMOVEIS", "CHEMIM IMÓVEIS", "BLANCO IMÓVEIS", "M. SILVESTRI NEG. IMOBILIÁRIOS", "SIMONE KOPP IMÓVEIS", "MINHA BC IMÓVEIS", "VOLTAIRE COPPI IMÓVEIS", "CONFIARE INVESTIMENTOS IMOBILIÁRIOS", "BARRA NOBRE", "EXO IMOVEIS", "ALDAIR BELLAN AB IMOVEIS", "MY HOUSE CAMBORIU", "49 IMOB", "SERPA NEGOCIOS IMOBILIÁRIOS", "IMOBILLE", "TAB IMOVEIS", "BIAZOTTO IMOVEIS", "INVEST GROUP", "JAISON IMOVEIS", "BERTAZZO AUTONOMOS", "MEU FRENTE MAR", "ITK NEGÓCIOS IMOBILIÁRIOS", "MY BROKER", "EZOEL IMOVEIS", "TATO NEGOCIOS IMOBILIARIOS", "Virtualy Imóveis", "CHEDIT IMOVEIS", "GRAND EXCLUSIVE", "DUBAI BC IMÓVEIS", "DELTA ADMINISTRADORA", "SIMONE SANTOS IMÓVEIS", "LITORAL PREMIUM", "WP NEGOCIOOS IMOBILIARIOS", "LANA IMOVEIS", "REINO INVESTIMENTOS", "NASCIMENTO IMÓVEIS", "Bernz Imóveis", "Tonadri", "Qualitah"], "thalita": ["Imobiliária Roberta Pires", "Mineiro Gestão e Vendas", "Orientare Imóveis", "Santa Catarina", "Israel Fogaça", "Vendòre", "VS - Vinicius Santini Imóveis", "Laura Scariot", "Léo Rostro", "Guerreiro", "Tradição", "Imediata", "Amorim Imóveis", "Agama", "Livena Imóveis", "Marçal Orlandi", "Romulo Matias", "Carlos Loss", "Tarqueza", "Denis Boeng", "Nice Imóveis", "Nando Ottomayer Corretor", "João Stoppa Corretor", "Imobiliária Paraíso Ltda.", "Corretor Matheus Giacomini", "Imobiliária Beneduzi & Lopes", "Imobiliária Ello", "Imobiliária DMD", "Imobiliária Giraldi Imóveis", "Imobiliária BBBC Imóveis", "Imobiliária Max Imóveis", "Imobiliária May Imóveis", "Imobiliária P.O. Imobiliária", "Imobiliária AP Imobiliária", "Imobiliária Mercatto Imóveis", "Imobiliária Taj Imóveis", "Imobiliária Santa Imobiliária", "Imobiliária Martini Imobiliária", "Imobiliária West Imóveis", "Imobiliária Serendip Imóveis", "Imobiliária Privilége Imóveis", "Imobiliária G3 Imóveis", "Imobiliária EBI Eu Busco Imóvel", "Imobiliária Investe SI", "Imobiliária Viva Imobiliária", "Imobiliária Inex", "Imobiliária Tubias Imóveis", "Imobiliária Padrone Imóveis", "Imobiliária Casa Brava", "Imobiliária Sax", "Imobiliária Dilma Imóveis", "Imobiliária Bravamar Imóveis", "Corretor Ivanor Alves", "Corretora Viviane Renata", "Corretora Gabrielle Cordova", "Corretora Aline Xavier", "Corretor Leonardo Teles", "Corretora Renata Lesniewski", "Corretor Jorge Zastrow", "Ansolin e Lazzari Imobiliária", "Corretora Simone Atanazio", "Imobiliária Lino Imóveis", "Imobiliária Capta Invest", "Imobiliária Maga Imóveis", "Imobiliária Valor Imóveis", "Imobiliária Muller Imóveis", "Imobiliária Meu Imóvel BC", "Imobiliária Seu Imóvel em BC", "Imobiliária Maiolli Imóveis", "Imobiliária Pinotti Imóveis", "Imobiliária Millennium", "Imobiliária Salete Souza Imóveis", "HRM IMÓVEIS", "MK MAIS IMÓVEIS", "ROBERTA PIRES IMÓVEIS", "CHARLON HENNING IMOBILIÁRIA", "SPAZIO IMOBILIÁRIA", "CABEÇUDAS IMÓVEIS"]};
+var EMPREENDIMENTOS=["MORATTA", "BRAVA OCEAN HOME CLUB", "BRAVA PARK", "SOLARA", "TERRACE 360°", "BRAVA VALLEY", "BRAVA BREEZE", "MANTUA", "AQUARELA", "OUTROS"];
 var PINS={fernando:'9999',robson:'0000',thiago:'1111',phellippe:'2222',thalita:'3333',taline:'4444'};
 var GERENTES=['thiago','phellippe','thalita'];
 var COLORS={thiago:'#3B82F6',phellippe:'#14B8A6',thalita:'#F97316'};
@@ -647,12 +665,43 @@ function updateThermo(type,val,max,elId){
   el.querySelector('.mthermo-val').textContent=val+' / '+max;
 }
 function addImob(val){
+  var imobList=IMOBS[cur]||[];
   var idx=Date.now();
   var div=document.createElement('div');
   div.className='imob-entry';
   div.id='imob-e-'+idx;
-  div.innerHTML='<input type="text" placeholder="Nome da imobiliária" value="'+(val||'')+'" oninput=""><button class="imob-remove" onclick="this.parentNode.remove()">×</button>';
+  div.style.cssText='flex-direction:column;align-items:stretch;gap:6px;padding:10px';
+  // Build select
+  var sel=document.createElement('select');
+  sel.style.cssText='width:100%;background:var(--panel);border:0.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--white);outline:none';
+  var opt0=document.createElement('option');opt0.value='';opt0.textContent='Selecione a imobiliária...';sel.appendChild(opt0);
+  imobList.forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n;if(n===val)o.selected=true;sel.appendChild(o);});
+  var optOut=document.createElement('option');optOut.value='__manual__';optOut.textContent='Digitar manualmente...';sel.appendChild(optOut);
+  // Manual input (hidden by default)
+  var inp=document.createElement('input');
+  inp.type='text';inp.placeholder='Digite o nome da imobiliária';
+  inp.style.cssText='display:none;width:100%;background:var(--panel);border:0.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--white);outline:none';
+  if(val&&imobList.indexOf(val)<0){inp.value=val;inp.style.display='block';}
+  sel.addEventListener('change',function(){inp.style.display=this.value==='__manual__'?'block':'none';});
+  // Remove button row
+  var row=document.createElement('div');row.style.cssText='display:flex;gap:6px;align-items:center';
+  var rmBtn=document.createElement('button');rmBtn.className='imob-remove';rmBtn.textContent='×';
+  rmBtn.onclick=function(){div.remove();};
+  row.appendChild(sel);row.appendChild(rmBtn);
+  div.appendChild(row);div.appendChild(inp);
   document.getElementById('imob-list').appendChild(div);
+}
+function getImobNames(){
+  var names=[];
+  document.querySelectorAll('#imob-list .imob-entry').forEach(function(div){
+    var sel=div.querySelector('select');
+    var inp=div.querySelector('input[type=text]');
+    var v='';
+    if(sel&&sel.value==='__manual__'){v=inp&&inp.value.trim()?inp.value.trim():'';}
+    else if(sel&&sel.value){v=sel.value;}
+    if(v)names.push(v);
+  });
+  return names;
 }
 function getImobNames(){
   var names=[];
@@ -710,9 +759,50 @@ function collectData(isSubmit){
     prox:document.getElementById('fprox').value,
     late:deadlineStatus().late,
     submitted:isSubmit?true:false,
+    atendimentos:getAtendimentos(),
     ts:Date.now()
   };
 }
+
+var atendimentos={visitas:[],prop:[],'contr-ass':[],'contr-pag':[]};
+
+function addAtend(type){
+  var imobList=IMOBS[cur]||[];
+  var empOpts=EMPREENDIMENTOS.map(function(e){return'<option value="'+e+'">'+e+'</option>';}).join('');
+  var imobOpts='<option value="">Selecione ou digite...</option>'+imobList.map(function(n){return'<option value="'+n+'">'+n+'</option>';}).join('');
+  var idx=Date.now();
+  var container=document.getElementById(type+'-detail');
+  var div=document.createElement('div');
+  div.style.cssText='background:var(--panel);border:0.5px solid var(--border2);border-radius:9px;padding:10px;margin-bottom:8px;position:relative';
+  div.id='atend-'+type+'-'+idx;
+  div.innerHTML='<button onclick="this.parentNode.remove()" style="position:absolute;top:6px;right:8px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px">×</button>'
+    +'<div class="field" style="margin-bottom:8px"><label>Corretor(a)</label><input type="text" placeholder="Nome do corretor(a)"></div>'
+    +'<div class="field" style="margin-bottom:8px"><label>Imobiliária</label><select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--white);outline:none">'+imobOpts+'</select></div>'
+    +'<div class="f2"><div class="field"><label>Empreendimento</label><select style="width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--white);outline:none">'+empOpts+'</select></div>'
+    +'<div class="field"><label>Unidade</label><input type="text" placeholder="Ex: Ap 12A"></div></div>'
+    +(type==='contr-ass'||type==='contr-pag'?'<div class="field" style="margin-top:8px"><label>Valor (R$)</label><input type="number" placeholder="0"></div>':'');
+  container.appendChild(div);
+}
+
+function getAtendimentos(){
+  var result={};
+  ['visitas','prop','contr-ass','contr-pag'].forEach(function(type){
+    var items=[];
+    var container=document.getElementById(type+'-detail');
+    if(!container)return;
+    container.querySelectorAll('div[id^="atend-"]').forEach(function(div){
+      var inputs=div.querySelectorAll('input,select');
+      if(inputs.length>=4){
+        var item={corretor:inputs[0].value,imobiliaria:inputs[1].value,empreendimento:inputs[2].value,unidade:inputs[3].value};
+        if(inputs[4])item.valor=inputs[4].value;
+        items.push(item);
+      }
+    });
+    result[type]=items;
+  });
+  return result;
+}
+
 function saveDraft(){
   var d=gd(),k=wkey();
   if(!d[k])d[k]={week:wk(),reports:{}};
@@ -810,10 +900,10 @@ function buildDash(who){dashWho=who;
   var semOpts=keys.length?keys.map(function(k){return'<option value="'+k+'">Semana '+d[k].week+'</option>';}).join(''):'<option>Sem dados</option>';
   var gerCards=['thiago','phellippe','thalita'].map(function(g,gi){
     var cls=['pc-b','pc-t','pc-c'][gi];var col=COLORS[g];var pfx=['t','p','ta'][gi];
-    return'<div class="pc '+cls+'"><div class="pc-head"><div class="pc-name">'+g.charAt(0).toUpperCase()+g.slice(1)+'</div><div class="sdot s-empty" id="sd-'+pfx+'-'+who+'"></div></div><div class="pc-val" id="d-'+pfx+'-acum-'+who+'">—</div><div class="pc-sub">de R$ 5.000.000</div><div class="mp"><div class="mp-f" id="d-'+pfx+'-bar-'+who+'" style="width:0%;background:'+col+'"></div></div><div class="ps4"><div class="psi"><div class="psi-l">VGV sem.</div><div class="psi-v" id="d-'+pfx+'-vgv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Conversão</div><div class="psi-v" id="d-'+pfx+'-conv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Assinados</div><div class="psi-v" id="d-'+pfx+'-ass-'+who+'">—</div></div><div class="psi"><div class="psi-l">Pagos</div><div class="psi-v" id="d-'+pfx+'-pag-'+who+'">—</div></div></div><div id="d-'+pfx+'-pills-'+who+'" style="margin-top:6px"></div></div>';
+    return'<div class="pc '+cls+'"><div class="pc-head"><div class="pc-name">'+g.charAt(0).toUpperCase()+g.slice(1)+'</div><div class="sdot s-empty" id="sd-'+pfx+'-'+who+'"></div></div><div class="pc-val" id="d-'+pfx+'-acum-'+who+'">—</div><div class="pc-sub">de R$ 5.000.000</div><div class="mp"><div class="mp-f" id="d-'+pfx+'-bar-'+who+'" style="width:0%;background:'+col+'"></div></div><div class="ps4"><div class="psi"><div class="psi-l">VGV sem.</div><div class="psi-v" id="d-'+pfx+'-vgv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Conversão</div><div class="psi-v" id="d-'+pfx+'-conv-'+who+'">—</div></div><div class="psi"><div class="psi-l">Assinados</div><div class="psi-v" id="d-'+pfx+'-ass-'+who+'">—</div></div><div class="psi"><div class="psi-l">Pagos</div><div class="psi-v" id="d-'+pfx+'-pag-'+who+'">—</div></div></div><div id="d-'+pfx+'-pills-'+who+'" style="margin-top:6px"></div><div id="d-'+pfx+'-trava-'+who+'"></div></div>';
   }).join('');
   el.innerHTML='<div class="dash-h"><div><h1>Dashboard Canal SC</h1><p>'+title+' &mdash; Semana <span id="d-wk-'+who+'">'+(keys.length?d[keys[0]].week:'—')+'</span></p></div><div style="display:flex;gap:8px;align-items:center"><select class="sem-sel" onchange="changeSem(this.value)" id="sem-sel-'+who+'">'+semOpts+'</select><button class="logout-btn" onclick="logout()">Sair</button></div></div>'
-  +'<div id="sent-row-'+who+'" style="margin-bottom:14px"></div>'+(who==='fernando'?'<div class="meta-box" style="border-color:rgba(59,130,246,0.3)"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Robson — Coordenador (Meta Mensal)</div><div class="meta-big" id="d-rob-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Robson<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-rob-prog-'+who+'" style="width:0%;background:linear-gradient(90deg,#3B82F6,#14B8A6)"></div></div><div class="prog-lbl"><span>0%</span><span id="d-rob-pct-'+who+'">0%</span><span>100%</span></div></div>':'')
+  +'<div id="sent-row-'+who+'" style="margin-bottom:14px"></div>'+(who==='fernando'?'<div class="meta-box" style="border:0.5px solid rgba(59,130,246,0.3);margin-bottom:14px"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Robson — Coordenador (Meta Mensal)</div><div class="meta-big" id="d-rob-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Robson<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-rob-prog-'+who+'" style="width:0%"></div></div><div class="prog-lbl"><span>0%</span><span id="d-rob-pct-'+who+'">0%</span><span>100%</span></div></div>':'')
   +'<div class="meta-box"><div class="meta-top"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">VGV Acumulado no Mês</div><div class="meta-big" id="d-total-'+who+'">R$&nbsp;—</div></div><div style="text-align:right;font-size:12px;color:var(--muted)">Meta Total<br><b style="color:var(--text)">R$ 15.000.000</b></div></div><div class="prog"><div class="prog-f" id="d-prog-'+who+'" style="width:0%"></div></div><div class="prog-lbl"><span>0%</span><span id="d-pct-'+who+'">0%</span><span>100%</span></div></div>'
   +'<div class="p3">'+gerCards+'</div>'
   +'<div class="ranking-box"><div class="ranking-title">🏆 Ranking da Semana</div><div id="d-ranking-'+who+'"><div style="font-size:12px;color:var(--muted);text-align:center;padding:16px">Aguardando dados...</div></div></div>'
@@ -859,6 +949,13 @@ function loadSem(key,who){
       if(rp.perdOpc==='yes')pills+=' <span class="pill pill-warn">'+rp.perd+' perda(s)</span>';
       document.getElementById('d-'+pfx+'-pills-'+who).innerHTML=pills;
       if(dot)dot.className='sdot '+(p2>=80?'s-ok':p2>=50?'s-warn':'s-risk');
+      // Show trava/foco if filled
+      var tEl=document.getElementById('d-'+pfx+'-trava-'+who);
+      if(tEl){
+        tEl.innerHTML='';
+        if(rp.trava)tEl.innerHTML+='<div style="margin-top:6px;font-size:10px;color:var(--amber)">⚠ '+rp.trava+'</div>';
+        if(rp.prox)tEl.innerHTML+='<div style="margin-top:3px;font-size:10px;color:var(--muted)">→ '+rp.prox+'</div>';
+      }
     } else {
       document.getElementById('d-'+pfx+'-acum-'+who).textContent='Pendente';
       ['vgv','conv','ass','pag'].forEach(function(f){document.getElementById('d-'+pfx+'-'+f+'-'+who).textContent='—';});
